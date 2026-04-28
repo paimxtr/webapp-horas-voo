@@ -1,0 +1,233 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  COMMANDER
+  CREW_MEMBER
+}
+
+enum FlightLogStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+enum LimitPeriod {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum DutyScheduleStatus {
+  DRAFT
+  PUBLISHED
+  CHANGED
+  CANCELLED
+}
+
+// Phase 4.6: Multi-unit structural preparation
+model Unit {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  users       User[]
+}
+
+model User {
+  id              String                   @id @default(cuid())
+  username        String                   @unique
+  name            String
+  rank            String?
+  passwordHash    String
+  role            Role
+  active          Boolean                  @default(true)
+  unitId          String?
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @updatedAt
+  unit            Unit?                    @relation(fields: [unitId], references: [id])
+  flightLogs      FlightLog[]              @relation("FlightLogCrewMember")
+  crewReferences  FlightLog[]              @relation("FlightLogAdditionalCrew")
+  approvedLogs    FlightLog[]              @relation("FlightLogApprover")
+  notifications   Notification[]
+  auditLogs       AuditLog[]               @relation("AuditActor")
+  assignments     DutyScheduleAssignment[]
+  // Phase 4.2: Per-user limit overrides
+  hourLimitOverrides UserHourLimit[]
+  limitExemptions    LimitExemption[]      @relation("ExemptedUser")
+  exemptionsGranted  LimitExemption[]      @relation("ExemptionGranter")
+}
+
+model Aircraft {
+  id          String      @id @default(cuid())
+  code        String      @unique
+  model       String
+  tailNumber  String?
+  notes       String?
+  active      Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  flightLogs  FlightLog[]
+}
+
+model MissionType {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  description String?
+  active      Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  flightLogs  FlightLog[]
+}
+
+model FlightLog {
+  id              String                @id @default(cuid())
+  crewMemberId    String
+  aircraftId      String
+  missionTypeId   String
+  date            DateTime
+  origin          String
+  destination     String
+  departureTime   DateTime
+  arrivalTime     DateTime
+  durationMinutes Int
+  dutyRole        String
+  notes           String?
+  status          FlightLogStatus       @default(DRAFT)
+  rejectionReason String?
+  submittedAt     DateTime?
+  approvedAt      DateTime?
+  approvedById    String?
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  aircraft        Aircraft              @relation(fields: [aircraftId], references: [id])
+  crewMember      User                  @relation("FlightLogCrewMember", fields: [crewMemberId], references: [id])
+  otherCrewMembers User[]               @relation("FlightLogAdditionalCrew")
+  missionType     MissionType           @relation(fields: [missionTypeId], references: [id])
+  approvedBy      User?                 @relation("FlightLogApprover", fields: [approvedById], references: [id])
+  // Phase 4.3: File attachments
+  attachments     FlightLogAttachment[]
+
+  @@index([crewMemberId, status, date])
+  @@index([status, date])
+}
+
+// Phase 4.3: Flight log file attachments
+model FlightLogAttachment {
+  id           String    @id @default(cuid())
+  flightLogId  String
+  filename     String
+  originalName String
+  mimeType     String
+  sizeBytes    Int
+  uploadedById String
+  createdAt    DateTime  @default(now())
+  flightLog    FlightLog @relation(fields: [flightLogId], references: [id], onDelete: Cascade)
+
+  @@index([flightLogId])
+}
+
+model HourLimit {
+  id         String      @id @default(cuid())
+  period     LimitPeriod @unique
+  maxMinutes Int
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+// Phase 4.2: Per-user limit overrides
+model UserHourLimit {
+  id         String      @id @default(cuid())
+  userId     String
+  period     LimitPeriod
+  maxMinutes Int
+  reason     String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, period])
+  @@index([userId])
+}
+
+// Phase 4.2: Temporary limit exemptions (Commander only)
+model LimitExemption {
+  id            String      @id @default(cuid())
+  userId        String
+  period        LimitPeriod
+  validFrom     DateTime
+  validUntil    DateTime
+  justification String
+  grantedById   String
+  active        Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  user          User        @relation("ExemptedUser", fields: [userId], references: [id], onDelete: Cascade)
+  grantedBy     User        @relation("ExemptionGranter", fields: [grantedById], references: [id])
+
+  @@index([userId, validUntil])
+}
+
+model DutySchedule {
+  id          String                   @id @default(cuid())
+  title       String
+  description String?
+  location    String?
+  startAt     DateTime
+  endAt       DateTime
+  status      DutyScheduleStatus       @default(DRAFT)
+  publishedAt DateTime?
+  cancelledAt DateTime?
+  notes       String?
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt
+  assignments DutyScheduleAssignment[]
+
+  @@index([status, startAt])
+}
+
+model DutyScheduleAssignment {
+  id         String       @id @default(cuid())
+  scheduleId String
+  userId     String
+  roleLabel  String?
+  notes      String?
+  createdAt  DateTime     @default(now())
+  schedule   DutySchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([scheduleId, userId])
+  @@index([userId])
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  link      String?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  action     String
+  entityType String
+  entityId   String
+  details    String?
+  createdAt  DateTime @default(now())
+  actor      User?    @relation("AuditActor", fields: [actorId], references: [id])
+
+  @@index([entityType, entityId, createdAt])
+}
