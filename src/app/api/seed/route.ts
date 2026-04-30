@@ -21,18 +21,17 @@ export async function GET(req: Request) {
 
     // Create unit
     const unit = await prisma.unit.create({
-      data: { name: "Esquadra 271 – C-295", code: "ESQ271", description: "27º RAVP – Força Aérea Angolana" },
+      data: { name: "Esquadra 271 – C-295", description: "27º RAVP – Força Aérea Angolana" },
     });
 
     // Create commander
     await prisma.user.create({
       data: {
-        fullName: "Antonio da Silva Dias Paim",
-        email: "antonio",
+        name: "Antonio da Silva Dias Paim",
+        username: "antonio",
         passwordHash: hash,
         role: "COMMANDER",
         rank: "Comandante",
-        specialty: "Piloto",
         unitId: unit.id,
       },
     });
@@ -40,24 +39,22 @@ export async function GET(req: Request) {
     // Create crew
     await prisma.user.create({
       data: {
-        fullName: "Carlos Mendes",
-        email: "carlos.mendes",
+        name: "Carlos Mendes",
+        username: "carlos.mendes",
         passwordHash: crewHash,
         role: "CREW_MEMBER",
         rank: "Capitão",
-        specialty: "Copiloto",
         unitId: unit.id,
       },
     });
 
     await prisma.user.create({
       data: {
-        fullName: "Maria Santos",
-        email: "maria.santos",
+        name: "Maria Santos",
+        username: "maria.santos",
         passwordHash: crewHash,
         role: "CREW_MEMBER",
         rank: "Tenente",
-        specialty: "Loadmaster",
         unitId: unit.id,
       },
     });
