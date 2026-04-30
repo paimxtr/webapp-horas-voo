@@ -1,10 +1,10 @@
-import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import bcrypt from "bcryptjs";
 import { DutyScheduleStatus, FlightLogStatus, LimitPeriod, PrismaClient, Role } from "@prisma/client";
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) throw new Error("DATABASE_URL não está definida.");
-const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString }) });
+const prisma = new PrismaClient({ adapter: new PrismaBetterSqlite3({ url: connectionString }) });
 
 async function main() {
   await prisma.auditLog.deleteMany();
