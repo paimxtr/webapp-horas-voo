@@ -1,8 +1,0 @@
-[33mTo request a particular subdomain, you first need to register your SSH public key.
-To register, visit one the addresses below to login with your Google or GitHub account.
-After registering, you'll be able to request your subdomain the next time you connect
-to Serveo.
-[0m
-https://console.serveo.net/ssh/keys?add=SHA256%3ASDu9Xn3v84rk7RAXBXJw9UypJptWMLaXHiODwkcoDBY
-[32mForwarding HTTP traffic from https://837d8ebfba525d3c-41-63-177-44.serveousercontent.com
-[0m

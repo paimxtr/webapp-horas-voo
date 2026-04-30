@@ -1,0 +1,74 @@
+
+> webapp-horas-voo@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.4 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.100.207:3000
+- Environments: .env.local, .env
+✓ Ready in 536ms
+- Experiments (use with caution):
+  ✓ authInterrupts
+
+⨯ ./src/lib/db.ts:1:1
+Module not found: Can't resolve '@prisma/adapter-pg'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mPrismaPg[0m } [36mfrom[0m [32m"@prisma/adapter-pg"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m [36mimport[0m { [33mPrismaClient[0m } [36mfrom[0m [32m"@prisma/client"[0m;
+  [90m3 |[0m
+  [90m4 |[0m [36mconst[0m globalForPrisma = globalThis [36mas[0m [36mtypeof[0m globalThis & {
+
+
+
+Import trace:
+  Server Component:
+    ./src/lib/db.ts
+    ./src/lib/auth.ts
+    ./src/app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET / 500 in 369ms (next.js: 210ms, application-code: 159ms)
+⚠ Blocked cross-origin request to Next.js dev resource /__nextjs_original-stack-frames from "1d2808daebef15.lhr.life".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['1d2808daebef15.lhr.life'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+⚠ Blocked cross-origin request to Next.js dev resource /_next/webpack-hmr from "1d2808daebef15.lhr.life".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['1d2808daebef15.lhr.life'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+⨯ ./src/lib/db.ts:1:1
+Module not found: Can't resolve '@prisma/adapter-pg'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mPrismaPg[0m } [36mfrom[0m [32m"@prisma/adapter-pg"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m [36mimport[0m { [33mPrismaClient[0m } [36mfrom[0m [32m"@prisma/client"[0m;
+  [90m3 |[0m
+  [90m4 |[0m [36mconst[0m globalForPrisma = globalThis [36mas[0m [36mtypeof[0m globalThis & {
+
+
+
+Import trace:
+  Server Component:
+    ./src/lib/db.ts
+    ./src/lib/auth.ts
+    ./src/app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET / 500 in 20ms (next.js: 11ms, application-code: 10ms)
