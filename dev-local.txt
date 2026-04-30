@@ -1,0 +1,37 @@
+
+> webapp-horas-voo@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.4 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.100.207:3000
+- Environments: .env.local, .env
+✓ Ready in 548ms
+- Experiments (use with caution):
+  ✓ authInterrupts
+
+[next-auth][warn][NEXTAUTH_URL] 
+https://next-auth.js.org/warnings#nextauth_url
+ GET / 200 in 700ms (next.js: 301ms, application-code: 399ms)
+ GET / 200 in 72ms (next.js: 5ms, application-code: 67ms)
+ GET / 200 in 79ms (next.js: 4ms, application-code: 75ms)
+⚠ Blocked cross-origin request to Next.js dev resource /_next/webpack-hmr from "e7ac064944e196.lhr.life".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['e7ac064944e196.lhr.life'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET / 200 in 85ms (next.js: 4ms, application-code: 81ms)
+ GET /? 200 in 62ms (next.js: 3ms, application-code: 59ms)
+ GET /? 200 in 78ms (next.js: 4ms, application-code: 75ms)
+ GET / 200 in 57ms (next.js: 4ms, application-code: 53ms)
+ GET / 200 in 58ms (next.js: 3ms, application-code: 55ms)
+ GET /? 200 in 60ms (next.js: 4ms, application-code: 56ms)
+ GET /? 200 in 70ms (next.js: 4ms, application-code: 66ms)
+ GET /? 200 in 57ms (next.js: 4ms, application-code: 53ms)
+^C^C
