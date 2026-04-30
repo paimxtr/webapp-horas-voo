@@ -31,7 +31,7 @@ async function main() {
   });
 
   const commanderPassword = await bcrypt.hash("commander123", 10);
-  const crewPassword = await bcrypt.hash("tripulante123", 10);
+  const crewPassword = await bcrypt.hash("crew123", 10);
 
   const commander = await prisma.user.create({
     data: {
@@ -47,8 +47,8 @@ async function main() {
 
   const manuel = await prisma.user.create({
     data: {
-      username: "manuel",
-      name: "Tenente Manuel Pedro",
+      username: "carlos.mendes",
+      name: "Tenente Carlos Mendes",
       rank: "TEN",
       passwordHash: crewPassword,
       role: Role.CREW_MEMBER,
@@ -59,8 +59,8 @@ async function main() {
 
   const paulo = await prisma.user.create({
     data: {
-      username: "paulo",
-      name: "Subtenente Paulo Domingos",
+      username: "maria.santos",
+      name: "Subtenente Maria Santos",
       rank: "STEN",
       passwordHash: crewPassword,
       role: Role.CREW_MEMBER,
