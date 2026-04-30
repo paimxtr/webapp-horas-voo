@@ -1,6 +1,3 @@
-﻿-- CreateSchema
-CREATE SCHEMA IF NOT EXISTS "public";
-
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('COMMANDER', 'CREW_MEMBER');
 
@@ -301,4 +298,3 @@ ALTER TABLE "_FlightLogAdditionalCrew" ADD CONSTRAINT "_FlightLogAdditionalCrew_
 
 -- AddForeignKey
 ALTER TABLE "_FlightLogAdditionalCrew" ADD CONSTRAINT "_FlightLogAdditionalCrew_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
